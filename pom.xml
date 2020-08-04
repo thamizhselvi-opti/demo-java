@@ -7,8 +7,12 @@
   <version>1.0-SNAPSHOT</version>
   <name>Demo Maven Webapp</name>
   <url>https://github.com/tongueroo/demo-java</url>
+  <properties>
+    <docker.image.prefix>unyte</docker.image.prefix>
+    <build.version>v1.0</build.version>
+    </properties>
   <build>
-    <finalName>demo</finalName>
+    <finalName>${project.artifactId}</finalName>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
@@ -19,6 +23,51 @@
           <target>1.8</target>
         </configuration>
       </plugin>
+      <plugin>
+
+                                                                <groupId>io.fabric8</groupId>
+
+                                                                <artifactId>docker-maven-plugin</artifactId>
+
+                                                                <version>0.22.1</version>
+
+                                                                <configuration>
+
+                                                                                <images>
+
+                                                                                                <image>
+
+                                                                                                                <name>${docker.image.prefix}/${project.artifactId}</name>
+
+                                                                                                                <build>
+
+                                                                                                                                <dockerFileDir>${basedir}/src/main/docker</dockerFileDir>
+
+                                                                                                                                <assembly>
+
+                                                                                                                                                <descriptor>${basedir}/src/main/docker/assembly.xml</descriptor>
+
+                                                                                                                                </assembly>
+
+                                                                                                                                <tags>
+
+                                                                                                                                                <!--<tag>latest</tag>-->
+
+                                                                                                                                                <tag>${build.version}</tag>
+
+                                                                                                                                                <!--<tag>${project.version}</tag>-->
+
+                                                                                                                                </tags>
+
+                                                                                                                </build>
+
+                                                                                                </image>
+
+                                                                                </images>
+
+                                                                </configuration>
+
+                                                </plugin>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>3.0.0</version>
